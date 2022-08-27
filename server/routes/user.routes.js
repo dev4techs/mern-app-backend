@@ -1,6 +1,7 @@
 const express = require('express');
-const Users = require('./../model/user.model');
+const auth = require('./../model/authenticate');
 const {list,createNew,read,update,remove} = require ('./user.controller');
+const errorHandler = require('./../model/dbErrorHandler');
 
 const userRouter = express.Router();
 //list and create methods
@@ -18,25 +19,27 @@ userRouter.route('/')
     }
     catch(err)
     {
-        res.status(400).json({error: err.message})
+        res.status(400).json({error: errorHandler.getErrorMessage(err)})
     } 
 })
 .post(async(req, res)=> {
     
     try{
         const user= await createNew(req.body)
+        user.hashed_password = undefined;
+        user.salt = undefined;
         res.status(200).json(user)
     }
     catch(err)
     {
-        res.status(400).json({error: err.message})  
+        res.status(400).json({error: errorHandler.getErrorMessage(err)})  
     }
   });
 
 
 //read,update and delete methods
 userRouter.route('/:userId')
-.get(async(req, res) =>{
+.get(auth.requireSignin,auth.hasAuthorization, async(req, res) =>{
    const {userId} = req.params;
    try{
     const user = await read(userId)
@@ -44,6 +47,8 @@ userRouter.route('/:userId')
     {
         res.status(404).json({error: "no such user found"}) 
     }
+    user.hashed_password = undefined;
+    user.salt = undefined;
     res.status(200).json(user)
    }
    catch(err)
@@ -51,7 +56,7 @@ userRouter.route('/:userId')
     res.status(400).json({error: err.message})
    }
   })
-.put(async(req, res) =>{
+.put(auth.requireSignin, auth.hasAuthorization, async(req, res) =>{
    try
    {
         const updated= await update(req)
@@ -62,7 +67,7 @@ userRouter.route('/:userId')
     res.status(400).json({error: err.message})
    }
   })
-.delete(async(req, res) =>{
+.delete(auth.requireSignin, auth.hasAuthorization, async(req, res) =>{
     const {userId} = req.params
     try{
         const removed = await remove(userId)

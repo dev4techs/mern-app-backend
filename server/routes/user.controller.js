@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var Users = require('./../model/user.model');
+const Users = require('./../model/user.model');
 
 
 //ednpoints => api/users
