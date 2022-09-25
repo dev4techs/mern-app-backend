@@ -12,8 +12,6 @@ app.use(express.urlencoded({ extended: false }));
 
 
 
-
-
 // app.use('/', indexRouter);
 app.use('/api/users',userRouter);
 app.use('/auth',authRouter);

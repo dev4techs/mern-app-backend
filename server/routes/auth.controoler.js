@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 
 const signin = async(req,res)=>{
     try{
-        let user = await Users.findOne({'email': req.body.email})
+        // console.log("from the auth",req.body)
+        let user = await Users.findOne({'email': req.body.email}) 
         if(!user)
         {
             return res.status(401).json({error: "User not found!"})

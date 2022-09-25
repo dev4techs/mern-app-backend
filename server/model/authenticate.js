@@ -16,8 +16,8 @@ const hasAuthorization = (req,res,next)=>{
     //req.auth is created by the express JWT
     let s1=String(req.params.userId);
     let s2=String(req.auth._id)
-    console.log(s1)
-    console.log(req.auth)
+    // console.log(s1)
+    // console.log(req.auth)
     console.log()
     
    if(s1 == s2)

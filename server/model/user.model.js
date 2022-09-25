@@ -8,7 +8,7 @@ var UserSchema = new Schema(
         {
             type: String,
             trim: true,
-            required: true
+            required: 'Name is required'
         },
         email:
         {
@@ -16,7 +16,7 @@ var UserSchema = new Schema(
             trim: true,
             unique: true,
             match: [/.+\@.+\..+/, 'Please fill a valid email address'],
-            required: true
+            required: 'Email is required'
         },
         created:
         {
@@ -26,7 +26,7 @@ var UserSchema = new Schema(
         updated: Date,
         hashed_password: {
             type: String,
-            required: true
+            required: 'Password is required'
         },
         salt: String
     }
